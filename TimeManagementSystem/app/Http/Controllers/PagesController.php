@@ -7,7 +7,7 @@ use App\Project;
 
 class PagesController extends Controller
 {
-    public function home()
+    public function index()
     {
 
         $projects = Project::all();
@@ -16,8 +16,37 @@ class PagesController extends Controller
         return view('welcome', compact('projects'));
     }
 
-    public function about()
+    public function create()
     {
-        return view("about");
+        return view("create");
+    }
+    public function store()
+    {
+        $project = new Project();
+        $project->title = request('title');
+        $project->description = request('description');
+        $project->save();
+
+        return redirect('/projects');
+    }
+
+    public function show()
+    {
+
+    }
+
+    public function edit()
+    {
+
+    }
+
+    public function update()
+    {
+
+    }
+
+    public function destroy()
+    {
+
     }
 }

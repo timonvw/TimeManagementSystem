@@ -11,9 +11,17 @@
 |
 */
 
-Route::get('/', 'PagesController@home');
-Route::get('/about', "PagesController@about" );
+//short version
+Route::resource('projects', 'PagesController');
+
+//long version
+// Route::get('/projects', 'PagesController@index');
+// Route::get('/projects/create', "PagesController@create");
+// Route::post('/projects/create', "PagesController@store");
+// Route::get('/projects/{project}', "PagesController@show");
+// Route::get('/projects/{project}/edit', "PagesController@edit");
+// Route::patch('/projects/{project}', "PagesController@update");
+// Route::delete('/projects/{project}', "PagesController@destroy");
 
 Auth::routes();
-
 Route::get('/home', 'HomeController@index')->name('home');
