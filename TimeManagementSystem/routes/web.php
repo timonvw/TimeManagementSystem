@@ -23,5 +23,9 @@ Route::resource('projects', 'PagesController');
 // Route::patch('/projects/{project}', "PagesController@update");
 // Route::delete('/projects/{project}', "PagesController@destroy");
 
+Route::get('/', function () {
+    return view('homepage');
+});
+
 Auth::routes();
 Route::get('/home', 'HomeController@index')->name('home');

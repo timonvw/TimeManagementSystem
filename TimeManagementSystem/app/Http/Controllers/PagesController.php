@@ -13,40 +13,47 @@ class PagesController extends Controller
         $projects = Project::all();
 
 
-        return view('welcome', compact('projects'));
+        return view('projects.index', compact('projects'));
     }
 
     public function create()
     {
-        return view("create");
+        return view("projects.create");
     }
+
     public function store()
     {
-        $project = new Project();
-        $project->title = request('title');
-        $project->description = request('description');
-        $project->save();
+        $validated = request()->validate([
+            'title' => ['required', 'min:3', 'max:30'],
+            'description' => ['required', 'min:3', 'max:200']
+        ]);
+
+        Project::create($validated);
 
         return redirect('/projects');
     }
 
-    public function show()
+    public function show(Project $project)
     {
-
+        return view('projects.show', compact('project'));
     }
 
-    public function edit()
+    public function edit(Project $project)
     {
-
+        return view('projects.edit', compact('project'));
     }
 
-    public function update()
+    public function update(Project $project)
     {
+        $project->update(request(['title', 'description']));
 
+        return redirect('/projects');
     }
 
-    public function destroy()
+    public function destroy(Project $project)
     {
+        $project->delete();
 
+        return redirect('/projects');
     }
 }
