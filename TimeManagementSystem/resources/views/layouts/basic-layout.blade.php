@@ -8,13 +8,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
     <title>@yield('title', "Time Management System")</title>
-    <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.7.5/css/bulma.css">
-
+    {{-- <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.7.5/css/bulma.css"> --}}
+    <link href="{{ asset('css/app.css') }}" rel="stylesheet" type="text/css" media="all">
+    <script src="{{ asset('js/base.js')}}"></script>
     <!-- Styles -->
     <style>
-        body{
-            background-color: lightgray;
-        }
+
     </style>
 
 </head>
@@ -27,7 +26,7 @@
             {{-- <img src="https://bulma.io/images/bulma-logo.png" width="112" height="28"> --}}
             </a>
 
-            <a role="button" class="navbar-burger burger" aria-label="menu" aria-expanded="false" data-target="navbarBasicExample">
+            <a role="button" class="navbar-burger burger" onclick="document.querySelector('.navbar-menu').classList.toggle('is-active');" aria-label="menu" aria-expanded="false" data-target="navbarBasicExample">
             <span aria-hidden="true"></span>
             <span aria-hidden="true"></span>
             <span aria-hidden="true"></span>
@@ -82,10 +81,12 @@
         </div>
 </nav>
 
-
-<div class="container" style="margin-top: 50px; margin-bottom: 50px;">
+<section class="section">
+<div class="container">
     @yield('content')
 </div>
+</section>
+
 
 <footer class="footer">
     <div class="content has-text-centered">
