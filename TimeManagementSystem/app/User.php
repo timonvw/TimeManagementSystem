@@ -41,4 +41,16 @@ class User extends Authenticatable
     {
         return $this->hasMany(Task::class);
     }
+
+    public function times()
+    {
+        return $this->hasMany(Time::class);
+    }
+
+    public function groups()
+    {
+        return $this->belongsToMany(Group::class);//->withTimestamps();
+    }
+
+
 }
