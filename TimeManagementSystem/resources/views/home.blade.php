@@ -1,23 +1,23 @@
-@extends('layouts.app')
+@extends('layouts.basic-layout')
+
+@section('title', "Dashboard")
 
 @section('content')
-<div class="container">
-    <div class="row justify-content-center">
-        <div class="col-md-8">
-            <div class="card">
-                <div class="card-header">Dashboard</div>
 
-                <div class="card-body">
-                    @if (session('status'))
-                        <div class="alert alert-success" role="alert">
-                            {{ session('status') }}
-                        </div>
-                    @endif
-
-                    You are logged in!
-                </div>
-            </div>
+    @if (session('status'))
+        <div class="notification is-danger" role="alert">
+                {{ session('status') }}
         </div>
+    @endif
+
+    <div class="notification is-success">
+            <button class="delete"></button>
+            You succesful logged in.
     </div>
-</div>
+
+
+    <p>
+        <h1 class="title">Dashboard</h1>
+    </p>
+
 @endsection

@@ -1,6 +1,8 @@
-var toggle = $('.burger');
-var menu = $('.navbar-menu');
-
-toggle.on('click', function(event) {
-  menu.toggleClass('is-active');
-});
+document.addEventListener('DOMContentLoaded', () => {
+    (document.querySelectorAll('.notification .delete') || []).forEach(($delete) => {
+      $notification = $delete.parentNode;
+      $delete.addEventListener('click', () => {
+        $notification.parentNode.removeChild($notification);
+      });
+    });
+  });

@@ -8,7 +8,7 @@
         Create Project
     </h1>
 
-    <form method="POST" action="/projects">
+    <form class="box" method="POST" action="/projects">
         @csrf
 
         <div class="field">

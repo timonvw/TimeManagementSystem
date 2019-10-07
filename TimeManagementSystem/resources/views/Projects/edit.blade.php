@@ -8,7 +8,7 @@
         Edit Project
     </h1>
 
-    <form method="POST" action="/projects/{{$project->id}}">
+    <form class="box" method="POST" action="/projects/{{$project->id}}">
         @method('PATCH')
         @csrf
 
