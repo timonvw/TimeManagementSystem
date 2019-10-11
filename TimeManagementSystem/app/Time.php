@@ -6,6 +6,15 @@ use Illuminate\Database\Eloquent\Model;
 
 class Time extends Model
 {
+    protected $fillable = [
+        'user_id',
+        'date',
+        'start_time',
+        'end_time',
+        'task_id',
+        'group_id'
+        ];
+
     public function task()
     {
         return $this->belongsTo(Task::class);

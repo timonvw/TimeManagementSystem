@@ -13,6 +13,7 @@
 
 //short version
 Route::resource('projects', 'PagesController');
+Route::resource('/home', 'HomeController');
 
 //long version
 // Route::get('/projects', 'PagesController@index');
@@ -29,3 +30,4 @@ Route::get('/', function () {
 
 Auth::routes();
 Route::get('/home', 'HomeController@index')->name('home');
+Route::get('/logout', 'HomeController@logout');

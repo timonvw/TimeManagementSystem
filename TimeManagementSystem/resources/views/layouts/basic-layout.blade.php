@@ -19,6 +19,73 @@
 </head>
 
 <body>
+
+{{-- check if user is logged in or not --}}
+@if (Auth::check())
+<nav class="navbar" role="navigation" aria-label="main navigation">
+        <div class="navbar-brand">
+            <a class="navbar-item" href="/">
+            <p>Time Management</p>
+            {{-- <img src="/images/Logo.png" height="50"> --}}
+            </a>
+
+            <a role="button" class="navbar-burger burger" onclick="document.querySelector('.navbar-menu').classList.toggle('is-active');" aria-label="menu" aria-expanded="false" data-target="navbarBasicExample">
+            <span aria-hidden="true"></span>
+            <span aria-hidden="true"></span>
+            <span aria-hidden="true"></span>
+            </a>
+        </div>
+
+        <div id="navbarBasicExample" class="navbar-menu">
+            <div class="navbar-start">
+            <a class="navbar-item" href="/home">
+                Dashboard
+            </a>
+
+            <a class="navbar-item">
+                Tasks
+            </a>
+
+            <a class="navbar-item">
+                Groups
+            </a>
+
+            <div class="navbar-item has-dropdown is-hoverable">
+                <a class="navbar-link">
+                More
+                </a>
+
+                <div class="navbar-dropdown">
+                <a class="navbar-item">
+                    About
+                </a>
+                <a class="navbar-item">
+                    Jobs
+                </a>
+                <a class="navbar-item">
+                    Contact
+                </a>
+                <hr class="navbar-divider">
+                <a class="navbar-item">
+                    Report an issue
+                </a>
+                </div>
+            </div>
+            </div>
+
+            <div class="navbar-end">
+            <div class="navbar-item">
+                Welkom {{Auth::user()->name}}
+            </div>
+            <div class="navbar-item">
+            <a class="button is-danger" href="/logout">
+                Logout
+            </a>
+            </div>
+            </div>
+        </div>
+</nav>
+@else
 <nav class="navbar" role="navigation" aria-label="main navigation">
         <div class="navbar-brand">
             <a class="navbar-item" href="/">
@@ -80,15 +147,17 @@
             </div>
         </div>
 </nav>
+@endif
 
-<section class="section">
+
+<section class="section" {{--style="min-height: 100vh;"--}}>
 <div class="container">
     @yield('content')
 </div>
 </section>
 
 
-<footer class="footer">
+<footer class="footer" style="padding: 2rem 1rem 2rem">
     <div class="content has-text-centered">
         <p>
         <strong>Time Mangement</strong> by <a href="/">Timon van Waardhuizens</a>. The source code is licensed
