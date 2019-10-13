@@ -42,11 +42,11 @@
                 Dashboard
             </a>
 
-            <a class="navbar-item">
+            <a class="navbar-item" href="/tasks">
                 Tasks
             </a>
 
-            <a class="navbar-item">
+            <a class="navbar-item" href="/groups">
                 Groups
             </a>
 

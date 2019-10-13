@@ -12,8 +12,9 @@
 */
 
 //short version
-Route::resource('projects', 'PagesController');
+Route::resource('/projects', 'PagesController');
 Route::resource('/home', 'HomeController');
+Route::resource('/tasks', 'TasksController');
 
 //long version
 // Route::get('/projects', 'PagesController@index');
@@ -31,3 +32,4 @@ Route::get('/', function () {
 Auth::routes();
 Route::get('/home', 'HomeController@index')->name('home');
 Route::get('/logout', 'HomeController@logout');
+Route::get('/tasks', 'TasksController@index')->name('tasks');
