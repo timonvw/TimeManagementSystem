@@ -11,20 +11,19 @@
         }
     </style>
 
-    <form class="box" method="POST" action="{{ route('login') }}">
+    <h1 class="title">Tasks</h1>
+
+    <form class="box" method="POST" action="/tasks">
         @csrf
 
-        <div class="field">
-            <label class="label" for="email">{{ __('Task name') }}</label>
-            <div class="control">
-                <input id="email" type="email" class="input" name="email" value="{{ old('email') }}" required autocomplete="email" autofocus>
-            </div>
-        </div>
-
-        <div class="field">
-            <div class="control">
+        <label class="label" for="name">{{ __('Add a task') }}</label>
+        <div class="field is-grouped">
+            <p class="control is-expanded">
+                    <input id="name" type="text" class="input" name="name" value="{{ old('name') }}" required autocomplete="name" placeholder="task name">
+            </p>
+            <p class="control">
                 <button type="submit" class="button is-link">{{ __('Add') }}</button>
-            </div>
+            </p>
         </div>
 
         @if ($errors->any())
@@ -37,9 +36,10 @@
         </div>
         @endif
     </form>
+    <br>
 
-    @if (Auth::user()->tasks->count())
-        @foreach (Auth::user()->tasks as $task)
+    @if ($tasks->count())
+        @foreach ($tasks as $task)
             <table class="table is-hoverable is-fullwidth">
                 <tbody>
                     <tr class="box">

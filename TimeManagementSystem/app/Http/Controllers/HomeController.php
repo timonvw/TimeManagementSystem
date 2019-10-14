@@ -25,7 +25,8 @@ class HomeController extends Controller
      */
     public function index()
     {
-        return view('home');
+        $times = Auth::user()->times;
+        return view('home', compact('times'));
     }
 
     public function logout()

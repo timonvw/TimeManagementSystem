@@ -14,14 +14,4 @@
     <a href="/projects/{{ $project->id}}/edit">Edit</a>
 </p>
 
-@if ($project->tasks->count())
-<div class="content">
-    <ul>
-    @foreach ($project->tasks as $task)
-        <li>{{$task->name}}</li>
-    @endforeach
-    </ul>
-</div>
-@endif
-
 @endsection
