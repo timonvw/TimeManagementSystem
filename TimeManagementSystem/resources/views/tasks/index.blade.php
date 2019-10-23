@@ -44,8 +44,13 @@
                 <tbody>
                     <tr class="box">
                         <td style="width:100%; border:none;"><strong>{{$task->name}}</strong></td>
-                        <td style="border:none;"><a class="button is-light">Edit</a></td>
-                        <td style="border:none;"><a class="button is-danger">Delete</a></td>
+                        <td style="border:none;"><a class="button is-light" href="/tasks/{{$task->id}}/edit">Edit</a></td>
+                        <td style="border:none;">
+                                <form method="POST" action="/tasks/{{$task->id}}">
+                                    @method('DELETE')
+                                    @csrf
+                                    <button type="submit" class="button is-danger">Delete</button>
+                                </form></td>
                     </tr>
                 </tbody>
             </table>
