@@ -2,9 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Time;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use App\Time;
 
 class HomeController extends Controller
 {
@@ -26,7 +26,10 @@ class HomeController extends Controller
     public function index()
     {
         $times = Auth::user()->times;
-        return view('home', compact('times'));
+        $tasks = Auth::user()->tasks;
+        $groups = Auth::user()->groups;
+
+        return view('home', compact('times','tasks','groups'));
     }
 
     public function logout()
@@ -38,38 +41,67 @@ class HomeController extends Controller
     #region CRUD
     public function store()
     {
-        $validated = request()->validate([
-            'title' => ['required', 'min:3', 'max:30'],
-            'description' => ['required', 'min:3', 'max:200']
+        $time = request()->validate([
+            'start_time' => ['required', 'date'],
+            'end_time' => ['required', 'date'],
+            'task_id' => ['required'],
+            'group_id' => ['required']
         ]);
 
-        Time::create($validated);
+        $time = collect($time)->put('user_id', Auth::user()->id);
+        $time = $time->put('date', date("Y-m-d"));
 
-        return redirect('/projects');
+        //haat me leven met al deze date types
+        $time->put('start_time', strtotime(request()->start_time));
+        $time->put('end_time', strtotime(request()->end_time));
+
+        Time::create($time->all());
+
+        return redirect('/home');
     }
 
     public function show(Time $time)
     {
-        return view('projects.show', compact('time'));
+
     }
 
-    public function edit(Time $time)
+    public function edit(Time $home)
     {
-        return view('projects.edit', compact('time'));
+        if($home->user_id == Auth::user()->id)
+        {
+            $time = $home;
+            $tasks = Auth::user()->tasks;
+            $groups = Auth::user()->groups;
+
+            return view('home_edit', compact('time','tasks','groups'));
+        }
+        else
+        {
+            return redirect('/home');
+        }
     }
 
-    public function update(Time $time)
+    public function update(Time $home)
     {
-        $time->update(request(['title', 'description']));
+        $home->update(request()->validate([
+            'date' => ['required', 'date'],
+            'start_time' => ['required', 'date'],
+            'end_time' => ['required', 'date'],
+            'task_id' => ['required'],
+            'group_id' => ['required']
+        ]));
 
-        return redirect('/projects');
+        return redirect('/home');
     }
 
-    public function destroy(Time $time)
+    public function destroy(Time $home)
     {
-        $time->delete();
+        if($home->user_id == Auth::user()->id)
+        {
+            $home->delete();
+        }
 
-        return redirect('/projects');
+        return redirect('/home');
     }
     #endregion
 }

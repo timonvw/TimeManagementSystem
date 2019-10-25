@@ -12,9 +12,8 @@
     <link href="{{ asset('css/app.css') }}" rel="stylesheet" type="text/css" media="all">
     <script src="{{ asset('js/base.js')}}"></script>
     <!-- Styles -->
-    <style>
 
-    </style>
+    @yield('head')
 
 </head>
 
