@@ -29,7 +29,23 @@ class HomeController extends Controller
         $tasks = Auth::user()->tasks;
         $groups = Auth::user()->groups;
 
-        return view('home', compact('times','tasks','groups'));
+        //datatable voor lavacharts
+        $stocksTable = \Lava::DataTable();
+
+        $stocksTable->addDateColumn('Day of Month')
+                    ->addNumberColumn('Projected')
+                    ->addNumberColumn('Offical');
+
+        $stocksTable->addRow(['2019-10-10', 90, 80]);
+        $stocksTable->addRow(['2019-10-11', 80, 200]);
+        $stocksTable->addRow(['2019-10-12', 70, 30]);
+
+        \Lava::AreaChart('Population', $stocksTable, [
+            'title' => 'population growth',
+            'legend' => ['position' => 'in']
+        ]);
+
+        return view('home', compact('times','tasks','groups','stocksTable'));
     }
 
     public function logout()

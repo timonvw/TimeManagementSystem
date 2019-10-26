@@ -37,7 +37,9 @@
                             @endif
                         @endforeach
                         </td>
-                        <td style="border:none; align:right;"><button class="button is-link">More</button></td>
+                        @if ($group->admin_id == Auth::user()->id)
+                        <td style="border:none; align:right;"><a class="button is-link" href="/groups/{{$group->id}}">More</a></td>
+                        @endif
                     </tr>
                         {{-- <td style="border:none;"><a class="button is-light" href="/tasks/{{$task->id}}/edit">Edit</a></td>
                         <td style="border:none;">

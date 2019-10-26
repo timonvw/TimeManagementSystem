@@ -142,6 +142,10 @@
             </div>
         </div>
 
+        {{-- Grafiek --}}
+        <div class="box" id="pop_div"></div>
+        @areachart('Population', 'pop_div')
+
         @if ($times->count())
             <table class="table is-hoverable is-fullwidth">
                 <tbody class="box">

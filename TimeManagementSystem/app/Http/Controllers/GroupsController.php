@@ -59,7 +59,15 @@ class GroupsController extends Controller
      */
     public function show(Group $group)
     {
-        //
+        if($group->admin_id == Auth::user()->id)
+        {
+            $times = $group->times;
+            return view('groups.show', compact('group','times'));
+        }
+        else
+        {
+            return redirect('/groups');
+        }
     }
 
     /**
