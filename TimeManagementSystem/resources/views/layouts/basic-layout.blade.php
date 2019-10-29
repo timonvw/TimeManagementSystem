@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 
-<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
+<html class="has-navbar-fixed-top" lang="{{ str_replace('_', '-', app()->getLocale()) }}">
 
 <head>
 
@@ -21,7 +21,7 @@
 
 {{-- check if user is logged in or not --}}
 @if (Auth::check())
-<nav class="navbar" role="navigation" aria-label="main navigation">
+<nav class="navbar is-fixed-top is-light" role="navigation" aria-label="main navigation">
         <div class="navbar-brand">
             <a class="navbar-item" href="/">
             <p>Time Management</p>
@@ -85,7 +85,7 @@
         </div>
 </nav>
 @else
-<nav class="navbar" role="navigation" aria-label="main navigation">
+<nav class="navbar is-fixed-top is-light" role="navigation" aria-label="main navigation">
         <div class="navbar-brand">
             <a class="navbar-item" href="/">
             <p>Time Management</p>

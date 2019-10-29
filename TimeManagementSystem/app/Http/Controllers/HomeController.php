@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Time;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Carbon\Carbon;
 
 class HomeController extends Controller
 {
@@ -25,9 +26,40 @@ class HomeController extends Controller
      */
     public function index()
     {
-        $times = Auth::user()->times;
-        $tasks = Auth::user()->tasks;
-        $groups = Auth::user()->groups;
+        if(!request()->date)
+        {
+            $times = Auth::user()->times()->whereDate('start_time',Carbon::now()->toDateString())->get();
+        }
+        else
+        {
+            $times = Auth::user()->times()->whereDate('start_time', $request->date);
+        }
+
+        $tasks = Auth::user()->tasks()->select('id', 'name')->get();
+        $groups = Auth::user()->groups()->get();
+
+        /*
+        Om in de view in javascript het op te halen
+        var dates = {!! json_encode($datesCollect->toArray(), JSON_HEX_TAG) !!};
+        */
+
+        // $datesCollect = collect();
+
+        // $dateCounter = 0;
+
+        // //alle dates voor in de dropdown
+        // foreach ($times as $time)
+        // {
+        //     $date = $time->start_time->toDateString();
+
+        //     if(!$datesCollect->contains($date))
+        //     {
+        //         $datesCollect->put($dateCounter, ['date' => $date]);
+        //         $dateCounter++;
+        //     }
+        // }
+
+        // $datesCollect = $datesCollect->sortByDesc('date');
 
         //datatable voor lavacharts
         $stocksTable = \Lava::DataTable();
@@ -57,23 +89,26 @@ class HomeController extends Controller
     #region CRUD
     public function store()
     {
-        $time = request()->validate([
-            'start_time' => ['required', 'date'],
-            'end_time' => ['required', 'date'],
-            'task_id' => ['required'],
-            'group_id' => ['required']
-        ]);
+        if(request()->has('timeForm'))
+        {
+            $time = request()->validate([
+                'start_time' => ['required', 'date'],
+                'end_time' => ['required', 'date'],
+                'task_id' => ['required'],
+                'group_id' => ['required']
+            ]);
 
-        $time = collect($time)->put('user_id', Auth::user()->id);
-        $time = $time->put('date', date("Y-m-d"));
+            $time = collect($time)->put('user_id', Auth::user()->id);
+            $time = $time->put('date', date("Y-m-d"));
 
-        //haat me leven met al deze date types
-        $time->put('start_time', strtotime(request()->start_time));
-        $time->put('end_time', strtotime(request()->end_time));
+            //haat me leven met al deze date types
+            $time->put('start_time', strtotime(request()->start_time));
+            $time->put('end_time', strtotime(request()->end_time));
 
-        Time::create($time->all());
+            Time::create($time->all());
 
-        return redirect('/home');
+            return redirect('/home');
+        }
     }
 
     public function show(Time $time)
