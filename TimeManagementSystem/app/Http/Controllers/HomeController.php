@@ -6,6 +6,7 @@ use App\Time;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Carbon\Carbon;
+use phpDocumentor\Reflection\Types\Boolean;
 
 class HomeController extends Controller
 {
@@ -26,21 +27,9 @@ class HomeController extends Controller
      */
     public function index()
     {
-        if(!request()->date)
-        {
-            $times = Auth::user()->times()->whereDate('start_time',Carbon::now()->toDateString())->get();
-        }
-        else
-        {
-            $times = Auth::user()->times()->whereDate('start_time', $request->date);
-        }
-
-        $tasks = Auth::user()->tasks()->select('id', 'name')->get();
-        $groups = Auth::user()->groups()->get();
-
         /*
         Om in de view in javascript het op te halen
-        var dates = {!! json_encode($datesCollect->toArray(), JSON_HEX_TAG) !!};
+        var dates = {!! json_encode($searchedDate->toArray(), JSON_HEX_TAG) !!};
         */
 
         // $datesCollect = collect();
@@ -60,24 +49,118 @@ class HomeController extends Controller
         // }
 
         // $datesCollect = $datesCollect->sortByDesc('date');
+        return $this->getDataAndChartIndex();
+    }
 
-        //datatable voor lavacharts
-        $stocksTable = \Lava::DataTable();
+    private function getDataAndChartIndex()
+    {
+        //Standard values filters
+        $searchedTask = 0;
+        $searchedGroup = -1;
 
-        $stocksTable->addDateColumn('Day of Month')
-                    ->addNumberColumn('Projected')
-                    ->addNumberColumn('Offical');
+        if(request()->has('date'))
+        {
+            //DATE
+            $carbonDate = Carbon::parse(request()->date);
+            $searchedDate = $carbonDate->toDateString();
 
-        $stocksTable->addRow(['2019-10-10', 90, 80]);
-        $stocksTable->addRow(['2019-10-11', 80, 200]);
-        $stocksTable->addRow(['2019-10-12', 70, 30]);
+            //QUERY
+            $query = Auth::user()->times();
+            $query->whereDate('start_time', $searchedDate);
 
-        \Lava::AreaChart('Population', $stocksTable, [
-            'title' => 'population growth',
-            'legend' => ['position' => 'in']
-        ]);
+            //Check if task filter is signed
+            if(request()->taskFilter != 0)
+            {
+                $searchedTask = request()->taskFilter;
+                $query->where('task_id', $searchedTask);
+            }
 
-        return view('home', compact('times','tasks','groups','stocksTable'));
+            //Check if group filter is signed
+            if(request()->groupFilter != -1)
+            {
+                $searchedGroup = request()->groupFilter;
+                $query->where('group_id', $searchedGroup);
+            }
+
+            $times = $query->orderBy('start_time', 'desc')->get();
+        }
+        else
+        {
+            $searchedDate = Carbon::now()->toDateString();
+            $times = Auth::user()->times()->whereDate('start_time', $searchedDate)->orderBy('start_time', 'desc')->get();
+        }
+
+        $tasks = Auth::user()->tasks()->select('id', 'name')->get();
+        $groups = Auth::user()->groups()->get();
+
+        //=============================CHART AREA==========================================
+        //time->diffrence
+         //datatable voor lavacharts
+
+         //table aanmaken
+         $stocksTable = \Lava::DataTable();
+         //eesrte naam column toevoegen
+         $stocksTable->addStringColumn('Day of Month');
+         //total alle goed gemaakte array
+         $shovedStocksArray = [];
+         $finalStocksArray = ['Total:'];
+
+         //alle categorien aanmaken
+        foreach ($tasks as $task)
+        {
+            $stocksTable->addNumberColumn($task->name);
+            array_push($finalStocksArray, 0);
+        }
+
+        //door alle tijden gaan om hiervan de taak in de juiste vakje te zetten
+        foreach ($times as $time )
+         {
+            $timeString = date('H.i', strtotime($time->diffrence));
+            $resultArray = ['Total:'];
+
+            foreach ($tasks as $task)
+            {
+                if($task->name == $time->task->name)
+                {
+                    array_push($resultArray, $timeString);
+                }
+                else
+                {
+                    array_push($resultArray, 0);
+                }
+            }
+
+            //mulit array zetten
+            array_push($shovedStocksArray, $resultArray);
+         }
+
+         //dd($shovedStocksArray);
+         //dd($finalStocksArray);
+
+         for ($i=0; $i < count($shovedStocksArray); $i++)
+         {
+            for ($j=1; $j < count($shovedStocksArray[$i]); $j++)
+            {
+                $finalStocksArray[($j)] += $shovedStocksArray[$i][$j];
+            }
+         }
+
+         //dd($finalStocksArray);
+
+
+         $stocksTable->addRow($finalStocksArray);
+
+
+
+         \Lava::BarChart('Population', $stocksTable, [
+             'isStacked' => true,
+             'height' => 400,
+             'title' => 'The total hours spend today in Hours.Minuts'
+         ]);
+
+        //=============================CHART END AREA======================================
+
+         return view('home', compact('times','tasks','groups','stocksTable','searchedDate', 'searchedTask', 'searchedGroup'));
     }
 
     public function logout()
@@ -108,6 +191,10 @@ class HomeController extends Controller
             Time::create($time->all());
 
             return redirect('/home');
+        }
+        else
+        {
+            return $this->getDataAndChartIndex();
         }
     }
 

@@ -32,6 +32,11 @@
         {
             cursor: default;
         }
+
+        #datepicker
+        {
+            cursor: pointer;
+        }
     </style>
 
     <link rel="stylesheet" href="http://davidwalsh.name/dw-content/jquery-ui-css/custom-theme/jquery-ui-1.7.2.custom.css">
@@ -83,13 +88,16 @@
         // });
         // var availableDates = [];
 
-        // //datums formatteren in in array zetten
+        // //datums formatteren en in array zetten
         // for (let i = 0; i < result.length; i++)
         // {
         //     var formatDate = new Date(result[i][1].date);
         //     var formatter = formatDate.getDate() + "-" + (formatDate.getMonth() + 1) + "-" + formatDate.getFullYear()
         //     availableDates.push(formatter);
         // }
+
+        var date = {!! json_encode($searchedDate, JSON_HEX_TAG) !!};
+        //console.log(date);
 
         $(function ()
         {
@@ -104,7 +112,8 @@
                 maxDate: new Date()
             });
 
-            $("#datepicker").datepicker().datepicker("setDate", new Date());
+            $('#datepicker').datepicker().datepicker("setDate", new Date(date));
+
         });
 
     </script>
@@ -210,50 +219,69 @@
 
             <div class="level-right">
 
-            <div class="lelvel-item">
-                <form id="searchForm" method="POST" action="/home">
-                    @csrf
-                    <input onchange="this.form.submit()" type="text" class="input is-rounded" name="date" id="datepicker" readonly="readonly" size="12" value="12-12-2019">
-                </form>
-            </div>
-
-            <div class="lelvel-item">
-                <div class="select is-rounded">
-                    <form>
-                        <select>
-                            @foreach ($tasks as $date)
-                                <option>Task</option>
-                            @endforeach
-                            <option>All</option>
-                        </select>
-                    </form>
-                </div>
-            </div>
-
-            <div class="lelvel-item">
-                    <div class="select is-rounded">
-                        <form>
-                            <select>
-                                @foreach ($tasks as $date)
-                                    <option>Group</option>
-                                @endforeach
-                                <option>All</option>
-                            </select>
-                        </form>
+                <form id="searchForm" method="POST" action="/home"><div class="field is-grouped">
+                @csrf
+                    <div class="lelvel-item">
+                        <input onchange="this.form.submit()" type="text" class="input is-rounded" name="date" id="datepicker" readonly="readonly" size="12" value="12-12-2019">
                     </div>
-                </div>
+
+                    <div class="lelvel-item">
+                        <div class="select is-rounded">
+
+                            <select onchange="this.form.submit()" name="taskFilter" value="{{ old('taskFilter') }}">
+                                <option value="0">All tasks</option>
+                                @foreach ($tasks as $task)
+                                    @if ($task->id == $searchedTask)
+                                        <option selected value="{{$task->id}}">{{$task->name}}</option>
+                                    @else
+                                        <option value="{{$task->id}}">{{$task->name}}</option>
+                                    @endif
+                                @endforeach
+                            </select>
+
+                        </div>
+                    </div>
+
+                <div class="lelvel-item">
+                        <div class="select is-rounded">
+
+                            <select onchange="this.form.submit()" name="groupFilter" value="{{ old('groupFilter') }}">
+
+                                <option value="-1">All groups</option>
+
+                                @if ($searchedGroup == 0)
+                                    <option selected value="0">Prive</option>
+                                @else
+                                    <option value="0">Prive</option>
+                                @endif
+
+                                @foreach ($groups as $group)
+
+                                    @if ($group->id == $searchedGroup)
+                                        <option selected value="{{$group->id}}">{{$group->name}}</option>
+                                    @else
+                                        <option value="{{$group->id}}">{{$group->name}}</option>
+                                    @endif
+
+                                @endforeach
+
+                            </select>
+
+                        </div>
+                    </div>
+                </div></form>
+
             </div>
         </div>
 
         {{-- Grafiek --}}
         <div class="box" id="pop_div"></div>
-        @areachart('Population', 'pop_div')
+        @barchart('Population', 'pop_div')
 
         @if ($times->count())
             <table class="table is-hoverable is-fullwidth">
                 <tbody class="box">
             @foreach ($times as $time)
-
                         <tr>
                             <td style="border:none;"><strong>{{$time->task->name}}</strong></td>
 

@@ -21,7 +21,7 @@
 
 {{-- check if user is logged in or not --}}
 @if (Auth::check())
-<nav class="navbar is-fixed-top is-light" role="navigation" aria-label="main navigation">
+<nav class="box navbar is-fixed-top is-light" role="navigation" aria-label="main navigation">
         <div class="navbar-brand">
             <a class="navbar-item" href="/">
             <p>Time Management</p>
@@ -74,7 +74,7 @@
 
             <div class="navbar-end">
             <div class="navbar-item">
-                Welkom {{Auth::user()->name}}
+                Welcome {{Auth::user()->name}}
             </div>
             <div class="navbar-item">
             <a class="button is-danger" href="/logout">
@@ -85,7 +85,7 @@
         </div>
 </nav>
 @else
-<nav class="navbar is-fixed-top is-light" role="navigation" aria-label="main navigation">
+<nav class="box navbar is-fixed-top is-light" role="navigation" aria-label="main navigation">
         <div class="navbar-brand">
             <a class="navbar-item" href="/">
             <p>Time Management</p>
