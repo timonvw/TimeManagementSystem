@@ -3,8 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\Group;
+use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\MessageBag;
 
 class GroupsController extends Controller
 {
@@ -37,7 +40,7 @@ class GroupsController extends Controller
      */
     public function create()
     {
-        //
+        return view('groups.create');
     }
 
     /**
@@ -48,7 +51,74 @@ class GroupsController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $validate = Validator::make($request->all(), [
+            'name' => ['required', 'min:3', 'max:25'],
+            'emails' => ['required']
+        ]);
+
+        $group = [
+            'name' => $request->name,
+            'admin_id' => Auth::user()->id
+        ];
+
+        $explodedEmails = explode(',', $request->emails);
+        $users = collect([]);
+
+        foreach ($explodedEmails as $email)
+        {
+            $strippedEmail = preg_replace('/\s+/', '', $email);
+            $user = User::where('email', $strippedEmail)->first();
+
+            if($user)
+            {
+                //array_push($finalStrippedEmails, ['user_id' => $userId->id, 'group_id' => 0]);
+                if(Auth::user()->email != $strippedEmail)
+                {
+                    $users->push($user);
+                }
+                else
+                {
+                    //Voor als je je eigen email er in zet
+                    $validate->errors()->add('emails', "You can't put in your own email");
+                    return redirect('groups/create')->withErrors($validate)->withInput();
+                }
+            }
+            else
+            {
+                //als niet bestaat een error returnen
+                $validate->errors()->add('emails', $strippedEmail . " doesn't exist");
+                return redirect('groups/create')->withErrors($validate)->withInput();
+            }
+        }
+
+        $group = Group::create($group);
+        // $groupdId = $group->id;
+
+        foreach ($users as $user)
+        {
+            $group->users()->attach($user);
+        }
+
+        $group->users()->attach(Auth::user());
+
+        // for ($i=0; $i < count($finalStrippedEmails); $i++)
+        // {
+        //     $finalStrippedEmails[$i]['group_id'] = $groupdId;
+        // }
+
+        // DB::table('group_user')->insert($finalStrippedEmails);
+
+         // try
+            // {
+            //     // Validate the value...
+            // }
+            // catch (Exception $e)
+            // {
+            //     report($e);
+            //     return false;
+            // }
+
+        return redirect('/groups');
     }
 
     /**

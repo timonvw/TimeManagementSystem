@@ -48,7 +48,7 @@ class User extends Authenticatable
      * @var array
      */
     protected $fillable = [
-        'name', 'email', 'password',
+        'name', 'email', 'password'
     ];
 
     /**
@@ -81,7 +81,7 @@ class User extends Authenticatable
 
     public function groups()
     {
-        return $this->belongsToMany(Group::class);//->withTimestamps();
+        return $this->belongsToMany(Group::class)->withTimestamps();
     }
 
 

@@ -13,7 +13,7 @@
 
     <h1 class="title">Tasks</h1>
 
-    <form class="box" method="POST" action="/tasks">
+    <form class="box has-background-light" method="POST" action="/tasks">
         @csrf
 
         <label class="label" for="name">{{ __('Add a task') }}</label>

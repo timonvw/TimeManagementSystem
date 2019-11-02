@@ -146,7 +146,7 @@
             <div class="level-right">
                 <div class="level-item">
                 <form id="timeform" method="POST" action="/home">
-                    <label class="label" >Add time</label>
+                    <label class="label" >Add a time</label>
                     @csrf
                     <div class="field is-grouped">
 
@@ -188,7 +188,7 @@
 
                     <div class="field">
                         <div class="control">
-                            <button type="submit" name="timeForm" class="button is-link">Save</button>
+                            <button type="submit" name="timeForm" class="button is-link">Add</button>
                         </div>
                     </div>
 

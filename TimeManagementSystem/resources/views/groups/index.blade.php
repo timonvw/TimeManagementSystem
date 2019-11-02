@@ -13,6 +13,11 @@
 
     <h1 class="title">Groups</h1>
 
+
+    <div class="box has-background-light">
+        <a class="button is-link" href="/groups/create">Create a group</a>
+    </div>
+
     @if ($groups->count())
         @foreach ($groups as $group)
             <table class="table is-hoverable is-fullwidth box">
