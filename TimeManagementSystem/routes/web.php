@@ -37,3 +37,5 @@ Route::get('/logout', 'HomeController@logout');
 Route::get('/tasks', 'TasksController@index')->name('tasks');
 Route::get('/groups', 'GroupsController@index')->name('groups');
 Route::get('/user', 'UserController@index')->name('user');
+
+Route::get('/admin', 'AdminController@admin')->middleware('is_admin')->name('admin');

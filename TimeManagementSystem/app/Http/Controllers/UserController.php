@@ -132,7 +132,10 @@ class UserController extends Controller
     {
         $user = Auth::user();
 
-        $user->deleting($user);
+        $user->tasks()->delete();
+        $user->times()->delete();
+        $user->groups()->detach();
+
         Auth::logout();
 
         if ($user->delete())
