@@ -57,6 +57,10 @@
                 </tbody>
             </table>
         @endforeach
+    @else
+        <div class="box has-text-centered">
+            <h6 class="title is-6">No <strong>groups</strong> found.</h6>
+        </div>
     @endif
 
 @endsection

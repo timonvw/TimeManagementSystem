@@ -84,5 +84,15 @@ class User extends Authenticatable
         return $this->belongsToMany(Group::class)->withTimestamps();
     }
 
+    public static function boot()
+    {
+        parent::boot();
 
+        static::deleting(function($user)
+        {
+            $user->tasks()->delete();
+            $user->times()->delete();
+            $user->groups()->detach();
+        });
+    }
 }

@@ -16,6 +16,7 @@ Route::resource('/projects', 'PagesController');
 Route::resource('/home', 'HomeController');
 Route::resource('/tasks', 'TasksController');
 Route::resource('/groups', 'Groupscontroller');
+Route::resource('/user', 'UserController');
 
 //long version
 // Route::get('/projects', 'PagesController@index');
@@ -35,3 +36,4 @@ Route::get('/home', 'HomeController@index')->name('home');
 Route::get('/logout', 'HomeController@logout');
 Route::get('/tasks', 'TasksController@index')->name('tasks');
 Route::get('/groups', 'GroupsController@index')->name('groups');
+Route::get('/user', 'UserController@index')->name('user');

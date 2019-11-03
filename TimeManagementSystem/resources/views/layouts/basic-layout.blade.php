@@ -55,11 +55,11 @@
                 </a>
 
                 <div class="navbar-dropdown">
-                <a class="navbar-item">
-                    About
+                <a class="navbar-item" href="/user">
+                    Account
                 </a>
                 <a class="navbar-item">
-                    Jobs
+                    About
                 </a>
                 <a class="navbar-item">
                     Contact

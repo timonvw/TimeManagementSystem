@@ -94,7 +94,6 @@ class HomeController extends Controller
         $groups = Auth::user()->groups()->get();
 
         //=============================CHART AREA==========================================
-        //time->diffrence
          //datatable voor lavacharts
 
          //table aanmaken
@@ -110,6 +109,11 @@ class HomeController extends Controller
         {
             $stocksTable->addNumberColumn($task->name);
             array_push($finalStocksArray, 0);
+        }
+
+        if($tasks->count() == 0)
+        {
+            $stocksTable->addNumberColumn('No tasks');
         }
 
         //door alle tijden gaan om hiervan de taak in de juiste vakje te zetten
